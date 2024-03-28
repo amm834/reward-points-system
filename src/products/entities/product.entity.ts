@@ -23,5 +23,10 @@ export class Product {
   @Column('int', {
     default: 0,
   })
+  points: number;
+
+  @Column('int', {
+    default: 0,
+  })
   stock_units: number;
 }
