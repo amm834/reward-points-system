@@ -25,4 +25,7 @@ export class User {
 
   @OneToOne(() => Wallet, (wallet) => wallet.user)
   wallet: Relation<Wallet>;
+
+  @Column('simple-array')
+  roles: string[];
 }

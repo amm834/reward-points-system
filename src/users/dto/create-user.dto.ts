@@ -1,5 +1,5 @@
 import { IsEmail, IsString } from 'class-validator';
-import { Match } from '../../match/match.decorator';
+import { Match } from '../../decorators/match.decorator';
 
 export class CreateUserDto {
   @IsString()

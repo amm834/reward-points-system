@@ -1,17 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../enums/role.enum';
+import { RolesGuard } from '../decorators/roles.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -23,7 +26,8 @@ export class ProductsController {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   findAll() {
     return this.productsService.findAll();
   }
