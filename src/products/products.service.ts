@@ -1,14 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
-import { PRODUCT_REPOSITORY } from '../constants/providers.constant';
+import { In, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @Inject(PRODUCT_REPOSITORY)
+    @InjectRepository(Product)
     private productRepository: Repository<Product>,
   ) {}
 
@@ -32,5 +32,9 @@ export class ProductsService {
 
   remove(id: number) {
     return this.productRepository.delete(id);
+  }
+
+  async checkIfProductsExist(productIds: number[]): Promise<Product[]> {
+    return await this.productRepository.findBy({ id: In(productIds) });
   }
 }
