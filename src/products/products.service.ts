@@ -3,11 +3,12 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
+import { PRODUCT_REPOSITORY } from '../constants/providers.constant';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @Inject('PRODUCT_REPOSITORY')
+    @Inject(PRODUCT_REPOSITORY)
     private productRepository: Repository<Product>,
   ) {}
 
