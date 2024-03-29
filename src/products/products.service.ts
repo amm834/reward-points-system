@@ -21,8 +21,8 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    return this.productRepository.findOne({
-      where: { id },
+    return this.productRepository.findOneBy({
+      id,
     });
   }
 
@@ -34,7 +34,9 @@ export class ProductsService {
     return this.productRepository.delete(id);
   }
 
-  async checkIfProductsExist(productIds: number[]): Promise<Product[]> {
+  async checkIfProductsExist(
+    productIds: Array<string | number>,
+  ): Promise<Product[]> {
     return await this.productRepository.findBy({ id: In(productIds) });
   }
 }
