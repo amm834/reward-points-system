@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -11,7 +11,14 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+    const isUserExist = this.userRepository.findOneBy({
+      email: createUserDto.email,
+    });
+
+    if (isUserExist) {
+      throw new HttpException('User with this email already exists', 400);
+    }
+    return this.userRepository.save({ ...createUserDto, roles: ['user'] });
   }
 
   async findByEmail(email: string): Promise<User> {

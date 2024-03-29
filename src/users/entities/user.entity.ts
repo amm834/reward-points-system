@@ -6,6 +6,7 @@ import {
   Relation,
 } from 'typeorm';
 import { Wallet } from '../../wallets/entities/wallet.entity';
+import { Cart } from '../../cart/entities/cart.entity';
 
 @Entity({
   name: 'users',
@@ -28,4 +29,7 @@ export class User {
 
   @OneToOne(() => Wallet, (wallet) => wallet.user)
   wallet: Relation<Wallet>;
+
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Relation<Cart>;
 }
