@@ -17,7 +17,11 @@
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test:e2e": "jest --config ./test/jest-e2e.json",
+        "db:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:create",
+        "db:drop": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:drop",
+        "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run",
+        "seed:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create"
     },
     "dependencies": {
         "@nestjs/common": "^10.0.0",
@@ -31,7 +35,8 @@
         "mysql2": "^3.9.3",
         "reflect-metadata": "^0.2.0",
         "rxjs": "^7.8.1",
-        "typeorm": "^0.3.20"
+        "typeorm": "^0.3.20",
+        "typeorm-extension": "^3.5.0"
     },
     "devDependencies": {
         "@compodoc/compodoc": "^1.1.23",
@@ -47,6 +52,7 @@
         "@types/supertest": "^6.0.0",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
+        "better-sqlite3": "^9.4.3",
         "eslint": "^8.42.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-prettier": "^5.0.0",

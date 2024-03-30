@@ -82,4 +82,10 @@ export class CartService {
       return total + cartItem.product.points * cartItem.quantity;
     }, 0);
   }
+
+  async removeAllProductFromCart(user: User) {
+    await this.cartRepository.delete({
+      userId: user.id,
+    });
+  }
 }

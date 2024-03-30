@@ -14,6 +14,7 @@ export class CheckoutService {
     try {
       const totalPoint = await this.cartService.getCartTotalPoint(user);
       await this.walletService.redeemPoints(user, totalPoint);
+      await this.cartService.removeAllProductFromCart(user);
       return {
         message: 'You purchased successful',
       };
