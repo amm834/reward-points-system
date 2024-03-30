@@ -1,23 +1,33 @@
 import {
+  Column,
   Entity,
   JoinColumn,
-  OneToMany,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { CartItem } from './cart-item.entity';
+import { Product } from '../../products/entities/product.entity';
 
 @Entity()
 export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User, (user) => user.cart)
-  @JoinColumn()
+  @Column()
+  userId: number;
+
+  @Column()
+  productId: number;
+
+  @Column({ type: 'int', default: 1 })
+  quantity: number;
+
+  @ManyToOne(() => User, (user: User) => user.carts)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: Relation<User>;
 
-  @OneToMany(() => CartItem, (item) => item.cart)
-  items: Relation<CartItem[]>;
+  @ManyToOne(() => Product, (product: Product) => product.carts)
+  @JoinColumn({ name: 'productId', referencedColumnName: 'id' })
+  product: Relation<Product>;
 }

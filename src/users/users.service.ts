@@ -1,4 +1,9 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -10,25 +15,24 @@ export class UsersService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    const isUserExist = this.userRepository.findOneBy({
+  async create(createUserDto: CreateUserDto) {
+    const isUserExist = await this.userRepository.findOneBy({
       email: createUserDto.email,
     });
-
     if (isUserExist) {
-      throw new HttpException('User with this email already exists', 400);
+      throw new BadRequestException('User with this email already exists');
     }
     return this.userRepository.save({ ...createUserDto, roles: ['user'] });
   }
 
   async findByEmail(email: string): Promise<User> {
-    const customer = await this.userRepository.findOneBy({ email });
+    const user = await this.userRepository.findOneBy({ email });
 
-    if (!customer) {
-      throw new NotFoundException('Customer with this email does not exist');
+    if (!user) {
+      throw new HttpException('User not found', 404);
     }
 
-    return customer;
+    return user;
   }
 
   findOne(id: number) {

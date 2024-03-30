@@ -1,4 +1,10 @@
+import { IsNumber, IsOptional } from 'class-validator';
+
 export class CreateCartDto {
+  @IsNumber()
   productId: number;
-  quantity: number;
+
+  @IsNumber()
+  @IsOptional()
+  quantity?: number;
 }

@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Relation,
 } from 'typeorm';
-import { CartItem } from '../../cart/entities/cart-item.entity';
+import { Cart } from '../../cart/entities/cart.entity';
 
 @Entity({
   name: 'products',
@@ -37,6 +37,6 @@ export class Product {
   })
   stock_units: number;
 
-  @OneToMany(() => CartItem, (item) => item.product)
-  cartItems: Relation<CartItem[]>;
+  @OneToMany(() => Cart, (cart) => cart.product)
+  carts: Relation<Cart[]>;
 }

@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Relation,
@@ -30,6 +31,6 @@ export class User {
   @OneToOne(() => Wallet, (wallet) => wallet.user)
   wallet: Relation<Wallet>;
 
-  @OneToOne(() => Cart, (cart) => cart.user)
-  cart: Relation<Cart>;
+  @OneToMany(() => Cart, (cart) => cart.user)
+  carts: Relation<Cart[]>;
 }

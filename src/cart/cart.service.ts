@@ -1,27 +1,73 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCartDto } from './dto/create-cart.dto';
-import { User } from '../users/entities/user.entity';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
 import { Repository } from 'typeorm';
+import { CreateCartDto } from './dto/create-cart.dto';
+import { User } from '../users/entities/user.entity';
+import { Product } from '../products/entities/product.entity';
 
 @Injectable()
 export class CartService {
   constructor(
-    @InjectRepository(Cart) private cartRepository: Repository<Cart>,
+    @InjectRepository(Cart) private readonly cartRepository: Repository<Cart>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
   ) {}
 
-  create(createCartDto: CreateCartDto, user: User) {
-    // find existing cart
-    const cart = this.cartRepository.findOne({ where: { user: user } });
+  async addToCart(createCartDto: CreateCartDto, user: User) {
+    const product = await this.productRepository.findOne({
+      where: {
+        id: createCartDto.productId,
+      },
+    });
 
-    // if cart is not found, create a new one
-    if (!cart) {
-      const newCart = new Cart();
-      newCart.user = user;
-      return this.cartRepository.save(newCart);
+    if (!product) {
+      throw new UnprocessableEntityException('Product not found');
     }
 
-    return cart;
+    if (product.stock_units < createCartDto.quantity) {
+      throw new UnprocessableEntityException('Product out of stock');
+    }
+
+    const isProductInCart = await this.cartRepository.findOne({
+      where: {
+        productId: createCartDto.productId,
+        userId: user.id,
+      },
+    });
+
+    if (isProductInCart) {
+      isProductInCart.quantity =
+        createCartDto.quantity ?? isProductInCart.quantity;
+      await this.cartRepository.save(isProductInCart);
+      return;
+    }
+
+    const cart = this.cartRepository.create({
+      ...createCartDto,
+      userId: user.id,
+    });
+
+    await this.cartRepository.save(cart);
+  }
+
+  getCart(user: User) {
+    return this.cartRepository.find({
+      where: {
+        userId: user.id,
+      },
+      relations: ['product'],
+    });
+  }
+
+  async removeProductFromCart(createCartDto: CreateCartDto, user: User) {
+    const result = await this.cartRepository.delete({
+      productId: createCartDto.productId,
+      userId: user.id,
+    });
+
+    if (!result.affected) {
+      throw new UnprocessableEntityException('Product not found in cart');
+    }
   }
 }
