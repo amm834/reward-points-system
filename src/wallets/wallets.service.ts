@@ -34,4 +34,35 @@ export class WalletsService {
 
     return this.walletRepository.save(wallet);
   }
+
+  async transferPoints(from: User, to: User, points: number) {
+    try {
+      const fromWallet = await this.walletRepository.findOne({
+        where: {
+          userId: from.id,
+        },
+      });
+
+      if (fromWallet.reward_points < points) {
+        throw new BadRequestException('Insufficient points');
+      }
+
+      const toWallet = await this.walletRepository.findOne({
+        where: {
+          userId: to.id,
+        },
+      });
+
+      fromWallet.reward_points -= points;
+      toWallet.reward_points += points;
+
+      await this.walletRepository.save([fromWallet, toWallet]);
+
+      return {
+        message: 'Transfer successful',
+      };
+    } catch (e) {
+      throw new BadRequestException('Transfer failed');
+    }
+  }
 }
