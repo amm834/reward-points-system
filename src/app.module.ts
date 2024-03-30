@@ -7,6 +7,8 @@ import { WalletsModule } from './wallets/wallets.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartModule } from './cart/cart.module';
+import { TransactionsModule } from './transactions/transactions.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { CartModule } from './cart/cart.module';
     WalletsModule,
     AuthModule,
     CartModule,
+    TransactionsModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

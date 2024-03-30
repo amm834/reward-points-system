@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   Relation,
@@ -14,9 +15,16 @@ export class Wallet {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'float' })
-  point_balance: number;
+  @Column({ type: 'decimal', default: 0 })
+  balance: number;
+
+  @Column({ type: 'decimal', default: 0 })
+  reward_points: number;
+
+  @Column()
+  userId: number;
 
   @OneToOne(() => User, (user) => user.wallet)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: Relation<Wallet>;
 }
