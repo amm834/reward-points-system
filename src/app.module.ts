@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartModule } from './cart/cart.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { SettingsModule } from './settings/settings.module';
+import { CheckoutModule } from './checkout/checkout.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SettingsModule } from './settings/settings.module';
     CartModule,
     TransactionsModule,
     SettingsModule,
+    CheckoutModule,
   ],
   controllers: [AppController],
   providers: [AppService],

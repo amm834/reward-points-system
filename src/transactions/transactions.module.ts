@@ -3,9 +3,10 @@ import { TransactionsService } from './transactions.service';
 import { TransactionsController } from './transactions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Wallet } from '../wallets/entities/wallet.entity';
+import { SettingsModule } from '../settings/settings.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Wallet])],
+  imports: [SettingsModule, TypeOrmModule.forFeature([Wallet])],
   controllers: [TransactionsController],
   providers: [TransactionsService],
 })

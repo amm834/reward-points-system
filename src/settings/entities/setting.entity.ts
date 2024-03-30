@@ -1,1 +1,13 @@
-export class Setting {}
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class Setting {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ unique: true })
+  name: string;
+
+  @Column()
+  value: string;
+}

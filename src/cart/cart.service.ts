@@ -70,4 +70,16 @@ export class CartService {
       throw new UnprocessableEntityException('Product not found in cart');
     }
   }
+
+  async getCartTotalPoint(user: User) {
+    const cartItems = await this.cartRepository.find({
+      where: {
+        userId: user.id,
+      },
+      relations: ['product'],
+    });
+    return cartItems.reduce((total, cartItem) => {
+      return total + cartItem.product.points * cartItem.quantity;
+    }, 0);
+  }
 }
